@@ -188,7 +188,7 @@ public class Grid {
     }
 
     // flagger function to flag the cell
-
+    // if current cell is not flagged then flag it and already flagged then unflag it 
     public void flagger(int row, int col) {
         if (UpperLayer[row][col] == '-') {
             UpperLayer[row][col] = 'F';
