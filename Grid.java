@@ -4,23 +4,23 @@ import java.util.Set;
 
 public class Grid {
 
-
-    
     private int rows, columns, mines, safebox;
     public char[][] UpperLayer; // we will be printing this layer for user
     private int[][] DownLayer; // we will use this layer for our calculations
+
+    // safebox integer is to count the number of safebox which is not revealed so far
+ 
+
     
-    // making object for printer 
-    
+
     @SuppressWarnings("unused")
     private Grid() {
         // making private default constructor so it is impossible to create object of
         // Grid without
         // passing parameters
     }
-    
-    
-    //initializing Grid object with must need parameters   
+
+    // initializing Grid object with must need parameters
 
     Grid(int rows, int columns, int mines) {
         this.rows = rows;
@@ -35,22 +35,21 @@ public class Grid {
 
     }
 
-    // Private class printing , purpose of printing class is to print the grid 
-    // We make it private so outer class can't print whenever they want 
-    // Grid class will have control over Printing class 
+    // Private class printing , purpose of printing class is to print the grid
+    // We make it private so outer class can't print whenever they want
+    // Grid class will have control over Printing class
     private class Printing {
-       
-        // printing class has only one method which is to print the grid 
 
+        // printing class has only one method which is to print the grid
 
         public void printGrid() {
             System.out.print("   ");
 
-            // if number of rows of grid is greater then 10 then for spacing we have to this if conditions 
+            // if number of rows of grid is greater then 10 then for spacing we have to this
+            // if conditions
             if (rows >= 10) {
                 System.out.print(" ");
             }
-
 
             for (int i = 0; i < columns; i++) {
                 System.out.print(i + "  ");
@@ -59,7 +58,6 @@ public class Grid {
             System.out.println();
             System.out.print(" -");
 
-
             for (int i = 0; i < columns; i++) {
                 System.out.print("---");
             }
@@ -67,18 +65,15 @@ public class Grid {
             for (int i = 0; i < rows; i++) {
                 for (int j = 0; j < columns; j++) {
 
-
-
                     if (j == 0) {
-                        if (i < 10 && rows >= 10) { // again for spacing purpose 
+                        if (i < 10 && rows >= 10) { // again for spacing purpose
                             System.out.print(" " + i + "| ");
                         } else {
                             System.out.print(i + "| ");
                         }
                     }
 
-
-                    // this is only for colored output 
+                    // this is only for colored output
                     char ch = UpperLayer[i][j];
                     if (ch == '*') {
                         System.out.print("\u001B[31m" + ch + "\u001B[0m  "); // Red for mine
@@ -96,7 +91,7 @@ public class Grid {
         }
     }
 
-    //making printer object 
+    // making printer object
     Printing printer;
 
     private void settingBoardUp() {
@@ -110,7 +105,7 @@ public class Grid {
             }
         }
 
-        // we will put mines randomly 
+        // we will put mines randomly
         Random rand = new Random();
         int TotalCell = (this.rows) * (this.columns);
         int TotalMines = this.mines;
@@ -127,9 +122,15 @@ public class Grid {
         }
     }
 
+    // this function is used for revealing the grid
+    // if any box has 0 mines in its neighbors then it will perform DFS algorithm
+    // DoWeHaveToPrint variable indicates that we have to print the grid or not , it
+    // will be only when this method called by Main grid
 
-    
     public int revealBox(int row, int col, int DoWeHaveToPrint) {
+
+        // selected cell contains mine so we have to show all the mines and exit the
+        // code
         if (DownLayer[row][col] == -1) {
             for (int i = 0; i < rows; i++) {
                 for (int j = 0; j < columns; j++) {
@@ -141,9 +142,16 @@ public class Grid {
             printer.printGrid();
             return 0;
         }
+
+        // one cell without mine got revealed so we have to minus 1 from safebox
+
         safebox--;
+
+        // all 8 directions
         int dx[] = { -1, -1, -1, 0, 0, 1, 1, 1 };
         int dy[] = { -1, 0, 1, -1, 1, -1, 0, 1 };
+
+        // checking for neighbor's mines
         int neighbourMines = 0;
         for (int i = 0; i < 8; i++) {
             if (row + dx[i] >= 0 && row + dx[i] < rows && col + dy[i] >= 0 && col + dy[i] < columns
@@ -151,7 +159,12 @@ public class Grid {
                 neighbourMines++;
             }
         }
+
+        // setting current box in upper layer
         UpperLayer[row][col] = (char) (neighbourMines + '0');
+
+        // if none neighbors has mine then we have to do dfs call and this time we will
+        // not print the grid
         if (neighbourMines == 0) {
             for (int i = 0; i < 8; i++) {
                 if (row + dx[i] >= 0 && row + dx[i] < rows && col + dy[i] >= 0 && col + dy[i] < columns
@@ -161,13 +174,20 @@ public class Grid {
                 }
             }
         }
+
+        // print if told
         if (DoWeHaveToPrint == 1) {
             printer.printGrid();
         }
+
+        // if all the safe cell is revealed then safebox count will be 0 and we have to
+        // signal that game is complete
         if (safebox == 0)
             return 2;
         return 1;
     }
+
+    // flagger function to flag the cell
 
     public void flagger(int row, int col) {
         if (UpperLayer[row][col] == '-') {
