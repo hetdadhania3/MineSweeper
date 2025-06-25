@@ -2,6 +2,8 @@
 
 A Java-based simulation project that creates and manipulates a 2D grid based on user input. It emphasizes modular design with separate classes for input handling, grid operations, and application logic.
 
+Inspired by the classic [Minesweeper game](https://en.wikipedia.org/wiki/Minesweeper_(video_game)#:~:text=A%20player%20selects%20a%20cell,cells%20will%20automatically%20be%20opened).
+
 ## 📁 Project Structure
 
 ```
@@ -55,4 +57,3 @@ java Main
 
 - Uses `Scanner` to read input from the user.
 - Provides utility methods for common input tasks.
-
