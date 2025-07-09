@@ -9,17 +9,6 @@ public class Grid {
     private int[][] DownLayer; // we will use this layer for our calculations
 
     // safebox integer is to count the number of safebox which is not revealed so far
- 
-
-    
-
-    @SuppressWarnings("unused")
-    private Grid() {
-        // making private default constructor so it is impossible to create object of
-        // Grid without
-        // passing parameters
-    }
-
     // initializing Grid object with must need parameters
 
     Grid(int rows, int columns, int mines) {
